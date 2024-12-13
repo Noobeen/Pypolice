@@ -23,7 +23,7 @@ llm = ChatOpenAI(
 
 # Displaying the title and a brief description of the app
 st.title("PyPolish")
-st.write("Plz upload your python file ")
+st.header("Plz upload your python file ")
 
 
 # Creating a file uploader on the Streamlit app
@@ -92,7 +92,9 @@ if uploaded_file is not None:
     )
     
     #finally displaying all the details in the app
+    st.header("Pylint Score")
     st.write("Pylint score:", score)
+    st.header("Feedback")
     st.write(response)
 
 else:
