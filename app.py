@@ -24,7 +24,7 @@ if uploaded_file is not None:
     # Capture pylint output
     pylint_output = io.StringIO()
     pylint_args = [temp_file_path]
-    pylint.lint.Run(pylint_args, do_exit=False, reporter=pylint.reporters.text.TextReporter(pylint_output))
+    pylint.lint.Run(pylint_args, exit=False, reporter=pylint.reporters.text.TextReporter(pylint_output))
     pylint_output.seek(0)
     feedback = pylint_output.read()
 
