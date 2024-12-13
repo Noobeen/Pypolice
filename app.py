@@ -33,7 +33,7 @@ if uploaded_file is not None:
 
     # Display the file content in a text area
     file_content = uploaded_file.getvalue().decode("utf-8")
-    st.text_area("File content:", file_content, height=200)
+    st.text_area("File content:", file_content, height=400)
 
     # Saving the uploaded file to a temporary file
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
@@ -50,24 +50,24 @@ if uploaded_file is not None:
     # Extracting pylint score
     score = pylint.lint.Run([temp_file_path], exit=False).linter.stats.global_note
     st.write("Pylint score:", score)
-    st.text_area("Pylint feedback:", feedback, height=400)
 
-    q_prompt = '''You are python code analyzer whose job is to analyze the code given by user.
-    You will be provided with the code and also feedback form the pylint.
-    From the feedback given by the pylint suggest the user how to improve the code and its readability to increase pylint score.
-    Do not provide the final answer by modifying their code but give them example on what was the issue and how they should fix it.'''
+    Context = '''You are python code analyzer whose job is to analyze the code given by user.\
+    You will be provided with the code and also feedback and score from the pylint.\
+    From the feedback given by the pylint suggest the user how to improve the code and its readability to increase pylint score.\
+    Do not provide the final answer by modifying their code but instead give them example on what was the issue and how they should fix it.\
+    Finally Motivate them to make changes'''
 
-    prompt = ChatPromptTemplate.from_messages(
+    Prompt = ChatPromptTemplate.from_messages(
         [
             (
                 "system",
-                q_prompt,
+                Context,
             ),
             MessagesPlaceholder(variable_name="messages"),
         ]
     )
     output_parser= StrOutputParser()
-    chain = prompt | llm | output_parser
+    chain = Prompt | llm | output_parser
     a=chain.invoke(
     {
         "messages": [
