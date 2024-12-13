@@ -1,4 +1,4 @@
 streamlit
 pylint
-Langchain
-langhchain_openai
+langchain
+langchain-openai
