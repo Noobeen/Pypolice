@@ -30,8 +30,9 @@ if uploaded_file is not None:
 
     # Extract pylint score
     #score = pylint.lint.Run([temp_file_path], do_exit=False).linter.stats.global_note
+    print (f"feedback: {feedback}")
+    print(type(feedback))
 
-    st.write("Pylint score:", score)
     st.text_area("Pylint feedback:", feedback, height=400)
 
 else:
