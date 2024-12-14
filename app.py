@@ -22,9 +22,11 @@ llm = ChatOpenAI(
 )
 
 
-# Displaying the title and a brief description of the app
+# Displaying the title logo and a brief description of the app
+st.image("logo.jpg",width=200)
 st.title("PyPolice")
 st.header("Plz upload your python file ")
+
 
 
 # Creating a file uploader on the Streamlit app
