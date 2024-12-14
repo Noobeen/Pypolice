@@ -3,6 +3,7 @@
 import os
 import tempfile
 import io
+
 import streamlit as st
 import pylint.lint
 from langchain_openai import ChatOpenAI
@@ -12,7 +13,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 
 # Accessing the OpenAI API key from the secrets.toml and setting it as an environment variable
-os.environ["OPENAI_API_KEY"] = st.secrets["Open_key"] 
+os.environ["OPENAI_API_KEY"] = st.secrets["Open_key"]
 
 # Initializing LLM model
 llm = ChatOpenAI(
@@ -53,20 +54,19 @@ if uploaded_file is not None:
     score = pylint.lint.Run([temp_file_path], exit=False).linter.stats.global_note
 
     # Creating Prompt for LLM that provide the context
-    # pylint: disable=line-too-long
-    context_for_llm = '''You are python code analyzer whose job is to analyze the code given by user but not rewrite for them.\
+    CONTEXT_FOR_LLM = '''You are python code analyzer whose job is to analyze the code given by user but not rewrite for them.\
     You will have code and also feedback and score from the pylint.\
-    From the feedback given by the pylint, you should suggest user on how to improve the code and its readability to increase pylint score.\
-    Do not provide the final answer by modifying their code; but instead give them example on what was the issue and how they should fix it.\
+    From the feedback given by the pylint, you should detailly mention all errors.\
+    Then suggest user on how to improve the code and its readability to increase pylint score.\
+    Do not provide the final answer by modifying their code; but instead give them hint or example on what was the issue and how they should fix it.\
     Motivate them to get perfect pylint score'''
-    # pylint: disable=line-too-long
 
     # Creating chat promt template
     prompt_template = ChatPromptTemplate.from_messages(
         [
             (
                 "system",
-                context_for_llm,
+                CONTEXT_FOR_LLM,
             ),
             MessagesPlaceholder(variable_name="messages"),
         ]
@@ -83,16 +83,16 @@ if uploaded_file is not None:
     {
         "messages": [
             HumanMessage(
-                content=f'''This the user python code 
+                content=f'''This the user python code
                 {file_content}
-                Now this is the pylint Feedback: 
+                Now this is the pylint Feedback:
                 {feedback}
                 '''
             ),
         ],
     }
     )
-    
+
     #finally displaying all the details in the app
     st.header("Score")
     st.write(score)
