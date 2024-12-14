@@ -1,5 +1,4 @@
-'''This is the main file that app will use and using this app user can upload their
- python file and check for errors and suggestions to improve the code redability'''
+'''This is a streamlit application for web app that integrates pylint with LLM to provide feedback on python to users'''
 import os
 import tempfile
 import io
@@ -22,7 +21,7 @@ llm = ChatOpenAI(
 
 
 # Displaying the title and a brief description of the app
-st.title("PyPolish")
+st.title("PyPolice")
 st.header("Plz upload your python file ")
 
 
@@ -92,8 +91,8 @@ if uploaded_file is not None:
     )
     
     #finally displaying all the details in the app
-    st.header("Pylint Score")
-    st.write("Pylint score:", score)
+    st.header("Score")
+    st.write(score)
     st.header("Feedback")
     st.write(response)
 
