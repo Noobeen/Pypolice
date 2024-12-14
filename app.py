@@ -1,4 +1,5 @@
-'''This is a streamlit application for web app that integrates pylint with LLM to provide feedback on python to users'''
+'''This is a streamlit application for web app that integrates pylint \
+    with LLM to provide feedback on python to users'''
 import os
 import tempfile
 import io
@@ -52,18 +53,20 @@ if uploaded_file is not None:
     score = pylint.lint.Run([temp_file_path], exit=False).linter.stats.global_note
 
     # Creating Prompt for LLM that provide the context
-    context = '''You are python code analyzer whose job is to analyze the code given by user.\
-    You will be provided with the code and also feedback and score from the pylint.\
-    From the feedback given by the pylint suggest the user how to improve the code and its readability to increase pylint score.\
-    Do not provide the final answer by modifying their code but instead give them example on what was the issue and how they should fix it.\
-    Finally Motivate them to make changes'''
+    # pylint: disable=line-too-long
+    context_for_llm = '''You are python code analyzer whose job is to analyze the code given by user but not rewrite for them.\
+    You will have code and also feedback and score from the pylint.\
+    From the feedback given by the pylint, you should suggest user on how to improve the code and its readability to increase pylint score.\
+    Do not provide the final answer by modifying their code; but instead give them example on what was the issue and how they should fix it.\
+    Motivate them to get perfect pylint score'''
+    # pylint: disable=line-too-long
 
     # Creating chat promt template
-    Prompt = ChatPromptTemplate.from_messages(
+    prompt_template = ChatPromptTemplate.from_messages(
         [
             (
                 "system",
-                context,
+                context_for_llm,
             ),
             MessagesPlaceholder(variable_name="messages"),
         ]
@@ -73,7 +76,7 @@ if uploaded_file is not None:
     output_parser= StrOutputParser()
 
     # Creating chain
-    chain = Prompt | llm | output_parser
+    chain = prompt_template | llm | output_parser
 
     # Invoking the chain
     response=chain.invoke(
