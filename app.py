@@ -48,7 +48,9 @@ if uploaded_file is not None:
     # invoking pylint on the temporary file and storing the output in a feedback
     pylint_output = io.StringIO()
     pylint_args = [temp_file_path]
-    pylint.lint.Run(pylint_args, exit=False, reporter=pylint.reporters.text.TextReporter(pylint_output))
+    pylint.lint.Run(pylint_args, 
+                    exit=False, 
+                    reporter=pylint.reporters.text.TextReporter(pylint_output))
     pylint_output.seek(0)
     feedback = pylint_output.read()
     score = pylint.lint.Run([temp_file_path], exit=False).linter.stats.global_note
