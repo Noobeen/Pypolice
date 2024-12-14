@@ -3,6 +3,7 @@
 import os
 import tempfile
 import io
+import base64
 
 import streamlit as st
 import pylint.lint
@@ -22,9 +23,34 @@ llm = ChatOpenAI(
 )
 
 
+# function to add image
+@st.cache_data
+def get_img_as_base64(file):
+    with open(file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+img = get_img_as_base64("background.jpg")
+
+
+# adding background picture
+page_bg_image = f"""
+<style>
+[data-testid="stAppViewContainer"]{{
+background-image: url("data:image/png;base64,{img}");
+background-size: cover;
+}}
+</style>
+"""
+
+
+# Displaying the background image
+st.markdown(page_bg_image, unsafe_allow_html=True)
+
+
 # Displaying the title logo and a brief description of the app
 st.image("logo.jpg",width=200)
-st.title("PyPolice")
+st.title(":orange[Py]:blue[Police]")
 st.header("Plz upload your python file ")
 
 
